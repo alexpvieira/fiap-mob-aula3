@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Posting a Form</title>
+
+    <form name="register">
+        <input name="name" value="John">
+        <input name="surname" value="Smith">
+    </form>
+</head>
+<body>
+    
+    <script>
+        let form_data = new FormData(document.forms.register);
+        form_data.append("middle", "Lee");
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/your/endpoint/route/');
+        xhr.send(form_data);
+    </script>
+</body>
+</html>

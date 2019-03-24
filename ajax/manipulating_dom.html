@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Star Wars Characters</title>
+
+    <h2>Selecione qual personagem deseja visualizar</h2>
+
+    <select id="number_characters">
+        <option value="">Selecione</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="1000">1000</option>
+    </select>
+
+    <div id="character_sheet"></div>
+
+    <script>
+        let xhr = new XMLHttpRequest();
+
+        document.getElementById('number_characters').addEventListener('change', function(){
+            if (this.value) {
+                xhr.open('GET', `https://swapi.co/api/people/${this.value}/`);
+
+                xhr.responseType = 'json';
+                xhr.send();
+
+                xhr.onload = function() {
+                    document.getElementById('character_sheet').innerHTML = ''
+
+                    if (xhr.status != 200) {
+                        let line_element = document.createElement('p');
+                        let text = document.createTextNode('Nenhum personagem encontrado');
+
+                        document.getElementById("character_sheet").appendChild(line_element);
+                        line_element.appendChild(text);
+                    } 
+                    else {
+                        let response = xhr.response
+ 
+                        Object.keys(response).forEach(function(key) {
+                            if (Array.isArray(response[key])) {
+                                let line_element = document.createElement('p');
+                                let text = document.createTextNode(`${key}`);
+
+                                document.getElementById("character_sheet").appendChild(line_element);
+                                line_element.appendChild(text);
+                                
+                                let list_element = document.createElement('ul');
+
+                                document.getElementById("character_sheet").appendChild(list_element);
+
+                                for(value in response[key]) {
+                                    let list_item_element = document.createElement('li');
+                                    let text = document.createTextNode(`${response[key][value]}`);
+                                    
+                                    list_item_element.appendChild(text);
+                                    list_element.appendChild(list_item_element);
+                                }
+                            }
+                            else {
+                                let title = document.createElement('p');
+                                let title_text = document.createTextNode(`${key}: ${response[key]}`);
+
+                                document.getElementById("character_sheet").appendChild(title);
+                                title.appendChild(title_text);
+                            }
+                        })
+                    }
+                };
+            }
+        })
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
